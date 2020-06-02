@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans  xmlns="http://www.springframework.org/schema/beans"
+
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+
+        xmlns:context="http://www.springframework.org/schema/context"
+
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+
+        http://www.springframework.org/schema/context
+
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <context:property-placeholder location="classpath:SimpleDuck.properties"/>
+
+    <bean id = "quackBean"
+          class = "ru.dmitrikonnov.springAndDucks.quackBehavior.Quack">
+        <constructor-arg value="I'm a real duck, so I can quack"/>
+    </bean>
+
+    <bean id = "muteQuackBean"
+          class = "ru.dmitrikonnov.springAndDucks.quackBehavior.MuteQuack">
+        <constructor-arg value="..."/>
+    </bean>
+
+    <bean id = "squeakBean"
+          class = "ru.dmitrikonnov.springAndDucks.quackBehavior.Squeak">
+        <constructor-arg value="I can squeak!"/>
+    </bean>
+
+    <bean id="flyWithWingsBean"
+          class="ru.dmitrikonnov.springAndDucks.flyBehavior.FlyWithWings">
+        <constructor-arg index="0" value="30"/>
+        <constructor-arg index="1" value="I can fly!"/>
+    </bean>
+
+    <bean id="flyNoWayBean"
+          class="ru.dmitrikonnov.springAndDucks.flyBehavior.FlyNoWay">
+        <constructor-arg index="0" value="0"/>
+        <constructor-arg index="1" value="I can't fly!"/>
+    </bean>
+
+    <bean id="flyWithRocketBean"
+          class="ru.dmitrikonnov.springAndDucks.flyBehavior.FlyWithRocket">
+        <constructor-arg index="0" value="130"/>
+        <constructor-arg index="1" value="I'm kinda rocket!"/>
+    </bean>
+
+    <bean id="duck"
+          class="ru.dmitrikonnov.springAndDucks.ducks.SimpleDuck"
+          init-method="getDuckCounter"
+          destroy-method="die">
+        <constructor-arg ref="flyNoWayBean"/>
+        <property name="name" value="${duck.name}"/>
+
+    </bean>
+
+    <bean id="duck2"
+          class="ru.dmitrikonnov.springAndDucks.ducks.SimpleDuck"
+          init-method="getDuckCounter"
+          destroy-method="die">
+        <constructor-arg ref = "quackBean" />
+        <constructor-arg ref= "flyWithWingsBean"/>
+        <property name="name" value="ALEX"/>
+    </bean>
+
+    <bean id="duck3"
+          class="ru.dmitrikonnov.springAndDucks.ducks.SimpleDuck"
+          init-method="getDuckCounter"
+          destroy-method="die">
+        <property name="name" value="MIRIAM"/>
+        <property name="flyBehavior" ref="flyWithWingsBean"/>
+        <property name="quackBehavior" ref="muteQuackBean"/>
+    </bean>
+
+    <bean id = "mallardDuck"
+          class = "ru.dmitrikonnov.springAndDucks.ducks.MallardDuck"
+          init-method="getDuckCounter"
+          destroy-method="die">
+        <property name="name" value="MALLARD DUCk"/>
+        <property name="flyBehavior" ref="flyWithRocketBean"/>
+        <property name="quackBehavior" ref="squeakBean"/>
+    </bean>
+
+    <bean id = "protoDuck"
+          class = "ru.dmitrikonnov.springAndDucks.ducks.ProtoSimpleDuck"
+          scope="prototype"
+          init-method="getDuckCounter"
+          factory-method="generate">
+        <constructor-arg ref="flyWithWingsBean"/>
+        <constructor-arg ref="squeakBean"/>
+        <property name="name" value="${protoDuck.name}"/>
+
+    </bean>
+
+
+</beans>
